@@ -13,4 +13,5 @@ SLOVAK = LangPack(
     ),
     extra_chars=None,
     strip_accents=False,
+    strip_nikud=False,
 )
