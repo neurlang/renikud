@@ -26,7 +26,7 @@ from tqdm import tqdm
 from constants import MAX_LEN
 from lang_pack import LangPack
 from languages import get_lang_pack
-from tokenization import load_tokenizer
+from tokenization import VOCAB_SIZE, load_tokenizer
 
 def tokenize_ipa(ipa: str, token_to_id: dict[str, int], sorted_tokens: list[str]) -> list[int] | None:
     """Greedy longest-match IPA tokenization. Returns 1-indexed ids (0 = CTC blank).
@@ -111,6 +111,16 @@ def process_chunk(lines: list[str]) -> tuple[list[dict], int]:
         input_ids = enc["input_ids"]
         attention_mask = enc["attention_mask"]
         offset_mapping = enc["offset_mapping"]
+
+        # Guard: any token id >= VOCAB_SIZE will crash the embedding layer at training time
+        over = [tid for tid in input_ids if tid >= VOCAB_SIZE]
+        if over:
+            chars_over = [chr(tid) for tid in over]
+            raise ValueError(
+                f"VOCAB_SIZE={VOCAB_SIZE} exceeded by token ids {over} "
+                f"(chars: {chars_over!r}) in text: {text!r}. "
+                f"Increase VOCAB_SIZE in tokenization.py to at least {max(over) + 1} (0x{max(over) + 1:04x})."
+            )
 
         # active_mask: 1 for input_char positions, 0 for everything else
         active_mask = []
