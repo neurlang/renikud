@@ -115,7 +115,7 @@ def process_chunk(lines: list[str]) -> tuple[list[dict], int]:
         # active_mask: 1 for input_char positions, 0 for everything else
         active_mask = []
         for start, end in offset_mapping:
-            if end - start == 1:
+            if end > start and start < len(text) and end <= len(text):
                 active_mask.append(1 if text[start] in lang_pack else 0)
             else:
                 active_mask.append(0)
