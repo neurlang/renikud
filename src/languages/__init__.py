@@ -1,7 +1,9 @@
 from languages.hebrew import HEBREW
+from languages.slovak import SLOVAK
 
 LANG_PACKS = {
     "hebrew": HEBREW,
+    "slovak": SLOVAK,
 }
 
 
