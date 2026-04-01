@@ -18,4 +18,5 @@ HEBREW = LangPack(
     ),
     extra_chars=frozenset("\u05BE\u05F3\u05F4"),  # maqaf, geresh, gershayim
     strip_accents=True,
+    strip_nikud=True,
 )

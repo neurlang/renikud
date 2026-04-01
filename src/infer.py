@@ -12,6 +12,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import unicodedata
+import regex as re
 from pathlib import Path
 
 import torch
@@ -79,7 +81,14 @@ def _enforce_one_stress(word_chunks: list[tuple[list[str], float]]) -> list[str]
     return result
 
 
+def strip_nikud(text: str) -> str:
+    text = unicodedata.normalize("NFD", text)
+    return re.sub(r"[\p{M}|]", "", text)
+
+
 def phonemize(text: str, model: G2PModel, tokenizer, lang_pack: LangPack, device: torch.device, max_len: int) -> str:
+    if lang_pack.strip_nikud:
+        text = strip_nikud(text)
     K = UPSAMPLE_FACTOR
     id_to_token = lang_pack.id_to_token()
     token_to_id = {v: k for k, v in id_to_token.items()}

@@ -92,7 +92,7 @@ def process_chunk(lines: list[str]) -> tuple[list[dict], int]:
             continue
 
         raw_text, ipa = parts
-        text = strip_nikud(raw_text)
+        text = strip_nikud(raw_text) if lang_pack.strip_nikud else raw_text
 
         # Tokenize full IPA string (strip punctuation/spaces)
         target_ids = tokenize_ipa(ipa, token_to_id, sorted_tokens)

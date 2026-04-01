@@ -16,6 +16,7 @@ class LangPack:
     max_slot_len: int = 3           # max IPA tokens one char can emit
     extra_chars: frozenset[str] = frozenset()  # script punctuation to include in vocab but not phonemize
     strip_accents: bool = True  # False for languages where accents are phonemically meaningful
+    strip_nikud: bool = True    # False for languages where diacritics are part of the script (e.g. Slovak)
 
     def token_to_id(self) -> dict[str, int]:
         return {t: i for i, t in enumerate(self.output_tokens)}
